@@ -2,7 +2,9 @@ const router = require('express').Router();
 
 router.get('/', async (req, res) => {
   // Send the rendered Handlebars.js template back as the response
-  const posts = router.findAll({
+  
+  try{
+    const posts = router.findAll({
     attributes: [
       'id',
       'title',
@@ -25,6 +27,19 @@ router.get('/', async (req, res) => {
   }]
   })
   res.render('homepage', posts);
+}catch (err) {
+  console.log(err);
+  res.status(500).json(err);
+}
+});
+
+router.get('/login', (req, res) => {
+  if (req.session.logged_in) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('login');
 });
 
 module.exports = router;
