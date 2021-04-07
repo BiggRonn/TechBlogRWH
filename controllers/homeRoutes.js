@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { Post, User, Comment } = require('../models');
 
 router.get('/', async (req, res) => {
   // Send the rendered Handlebars.js template back as the response
@@ -34,7 +35,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  if (req.session.logged_in) {
+  if (req.session.loggedIn) {
     res.redirect('/');
     return;
   }
