@@ -9,8 +9,57 @@ const withAuth = require('../../utils/auth');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
+// GET /api/users -- get all users from DB and exclude password attribute
+router.get('/', (req, res) => {
+  
+  User.findAll({
+      attributes: { exclude: ['password'] }
+  })
+    .then(userData => res.json(userData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
 
-
+// GET /api/users/1 -- get a single user by id excluding the password attribute
+router.get('/:id', (req, res) => {
+  User.findOne({
+    attributes: { exclude: ['password'] },
+    where: {
+      id: req.params.id
+    },
+    // include all post user has created or commented on
+    include: [
+      {
+        model: Post,
+        attributes: ['id', 'title', 'content', 'created_at']
+      },
+      {
+          model: Comment,
+          attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
+          include: {
+              model: Post,
+              attributes: ['title']
+          }
+      }
+    ]
+  })
+    .then(userData => {
+      if (!userData) {
+        // error if no user
+        res.status(404).json({ message: 'No user found with this id' });
+        return;
+      }
+    
+      res.json(userData);
+    })
+    .catch(err => {
+      // return any errors
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
 
 
 
