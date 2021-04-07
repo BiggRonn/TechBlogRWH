@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
             'title',
             'created_at',
           ],
-        // Order the posts from most recent to least
+        // post will be sorted from most recent to least recent
         order: [[ 'created_at', 'DESC']],
-        //include user name of post creator and all comments for the post
+        //include post username
         include: [
             {
                 model: User,
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
     };
 });
 
-// GET api/posts/:id -- get a single post by id with id, content, title, and created_at attributes.. also include all comments for that post and username that created it
+// GET api/posts/:id -- target a post by id and display the id, content, title, and created_at attributes.. also include all comments for that post and username that created it
 router.get('/:id', async (req, res) => {
     try{
     const postData = Post.findOne({
@@ -70,7 +70,7 @@ router.get('/:id', async (req, res) => {
     })
      
         if (!postData) {
-          res.status(404).json({ message: 'No post found with this id' });
+          res.status(404).json({ message: 'ID not found' });
           return;
         }
         res.json(postData);
