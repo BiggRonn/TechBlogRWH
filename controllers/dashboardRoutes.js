@@ -42,4 +42,46 @@ router.get('/', withAuth, async (req, res) => {
       };
   });
 
+// Edit a post
+router.get('/edit/:id', withAuth, async (req, res) => {
+   try{
+    const postData = Post.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: [
+        'id',
+        'title',
+        'content',
+        'created_at',
+      ],
+      include: [
+        {
+          model: Comment,
+          attributes: ['id', 'content', 'user_id', 'post_id', 'created_at'],
+          include: {
+            model: User,
+            attributes: ['name']
+          }
+        },
+        {
+          model: User,
+          attributes: ['name']
+        }
+      ]
+    })
+        if (!postData) {
+          res.status(404).json({ message: 'No post exists with this id' });
+          return;
+        }
+        //format data before passing to render
+        const post = postData.get({ plain: true });
+        res.render('edit-post', { post, loggedIn: true });
+      }
+      catch(err) {
+        console.log(err);
+        res.status(500).json(err);
+      };
+  });  
+
   
