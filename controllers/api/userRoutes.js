@@ -84,7 +84,7 @@ router.post('/', async (req, res) => {
 //user login route
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({
+    const uData = await User.findOne({
       where: {
         email: req.body.email,
       },
@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
       return;
     }
     //verify user using checkPassword method in User model
-    const validPassword = await userData.checkPassword(req.body.password);
+    const validPassword = await uData.checkPassword(req.body.password);
 
     if (!validPassword) {
       res
@@ -107,13 +107,13 @@ router.post('/login', async (req, res) => {
     }
     // After user email and password is checked, we add a loggedIn and user attributes to our session
     req.session.save(() => {
-      req.session.user_id = userData.id;
-      req.session.username = userData.username;
+      req.session.user_id = uData.id;
+      req.session.username = uData.username;
       req.session.loggedIn = true;
 
       res
         .status(200)
-        .json({ user: userData, message: 'You are now logged in!' });
+        .json({ user: uData, message: 'You are now logged in!' });
     });
   } catch (err) {
     console.log(err);

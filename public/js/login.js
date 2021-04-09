@@ -3,8 +3,8 @@ const loginFormHandler = async (event) => {
     event.preventDefault();
   
     // Collect values from the login form, clean out any empty space at ends
-    const email = document.querySelector('#email-login').value.trim();
-    const password = document.querySelector('#password-login').value.trim();
+    const email = document.querySelector('#user-email').value.trim();
+    const password = document.querySelector('#user-password').value.trim();
 
     if (email && password) {
       // If there are both an email and password, send a POST request
