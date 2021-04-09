@@ -32,14 +32,14 @@ router.get('/:id', (req, res) => {
     // include all post user has created or commented on
     include: [
       {
-        model: Post,
+        model: 'post',
         attributes: ['id', 'title', 'content', 'created_at']
       },
       {
-          model: Comment,
+          model: 'comment',
           attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
           include: {
-              model: Post,
+              model: 'post',
               attributes: ['title']
           }
       }

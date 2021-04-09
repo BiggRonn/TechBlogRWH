@@ -5,7 +5,7 @@ router.get('/', async (req, res) => {
   // Send the rendered Handlebars.js template back as the response
   
   try{
-    const posts = router.findAll({
+    const posts = Post.findAll({
     attributes: [
       'id',
       'title',
@@ -14,20 +14,20 @@ router.get('/', async (req, res) => {
 
     ],
     include: [{
-      model: User,
+      model: 'user',
       attributes: 'name'
     },
   {
-    model: Comment,
-    attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
+    model: 'comment',
+    attributes: ['id', 'content', 'user_id', 'post_id', 'created_at'],
     include: {
-      model: User,
+      model: 'user',
       attributes: 'name'
     }
 
   }]
   })
-  posts = posts.map(post => post.get({plain: true}));
+  //posts = posts.map(post => post.get({plain: true}));
   res.render('homepage', {posts, loggedIn: req.session.loggedIn});
 }catch (err) {
   console.log(err);

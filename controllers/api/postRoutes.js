@@ -55,14 +55,14 @@ router.get('/:id', async (req, res) => {
             ],
             include: [
                 {
-                    model: User,
+                    model: 'comment',
                     attributes: ['username']
                 },
                 {
-                    model: Comment,
+                    model: 'comment',
                     attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
                     include: {
-                        model: User,
+                        model: 'user',
                         attributes: ['username']
                     }
                 }

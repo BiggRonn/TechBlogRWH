@@ -60,12 +60,12 @@ router.get('/edit/:id', withAuth, async (req, res) => {
           model: Comment,
           attributes: ['id', 'content', 'user_id', 'post_id', 'created_at'],
           include: {
-            model: User,
+            model: 'user',
             attributes: ['name']
           }
         },
         {
-          model: User,
+          model: 'user',
           attributes: ['name']
         }
       ]
