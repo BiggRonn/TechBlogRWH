@@ -108,7 +108,7 @@ router.post('/login', async (req, res) => {
     // After user email and password is checked, we add a loggedIn and user attributes to our session
     req.session.save(() => {
       req.session.user_id = uData.id;
-      req.session.username = uData.username;
+      req.session.username = uData.name;
       req.session.loggedIn = true;
 
       res
