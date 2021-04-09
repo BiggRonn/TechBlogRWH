@@ -5,34 +5,36 @@ const withAuth = require('../../utils/auth');
 
 // GET api/posts/ -- get all posts and include id, content, title, and created_at attributes
 router.get('/', async (req, res) => {
+
     try {
         const postData = await Post.findAll({
 
             attributes: [
                 'id',
-                'content',
                 'title',
+                'content',
                 'created_at',
             ],
             // post will be sorted from most recent to least recent
             order: [['created_at', 'DESC']],
-            //include post username
+            //include name attribute of user who posted
             include: [
                 {
                     model: User,
-                    attributes: ['username']
+                    attributes: ['name']
                 },
                 {
                     model: Comment,
-                    attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
+                    attributes: ['id', 'content', 'user_id', 'post_id', 'created_at'],
                     include: {
                         model: User,
-                        attributes: ['username']
+                        attributes: ['name']
                     }
                 }
             ]
         })
-            .res.json(postData)
+    
+            res.json(postData);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);
@@ -42,29 +44,29 @@ router.get('/', async (req, res) => {
 // GET api/posts/:id -- target a post by id and display the id, content, title, and created_at attributes.. also include all comments for that post and username that created it
 router.get('/:id', async (req, res) => {
     try {
-        const postData = Post.findOne({
+        const postData = await Post.findOne({
             where: {
                 id: req.params.id
             },
 
             attributes: [
                 'id',
-                'content',
                 'title',
+                'content',
                 'created_at',
             ],
             include: [
                 {
-                    model: 'comment',
-                    attributes: ['username']
+                    model: User,
+                    attributes: ['name']
                 },
                 {
-                    model: 'comment',
-                    attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
-                    include: {
-                        model: 'user',
-                        attributes: ['username']
-                    }
+                    model: Comment,
+                    attributes: ['id', 'content', 'user_id', 'post_id', 'created_at'],
+                    include: [{
+                        model: User,
+                        attributes: ['name']
+                    }]
                 }
             ]
         })

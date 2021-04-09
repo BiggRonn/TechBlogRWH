@@ -6,12 +6,13 @@ const withAuth = require('../../utils/auth');
 
 // Get comments
 router.get('/', async (req, res) => {
-    const commentData = Comment.findAll()
-        .then(commentData => res.json(commentData))
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+    try {
+        const commentData = await Comment.findAll()
+        res.json(commentData)
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    };
 });
 
 // Post a new comment
@@ -49,10 +50,11 @@ router.delete('/:id', withAuth, async (req, res) => {
         }
         res.json(commentData);
     }
-        catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-}});
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
 ;
 
 module.exports = router;
