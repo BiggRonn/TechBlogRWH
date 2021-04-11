@@ -47,10 +47,8 @@ router.get('/', (req, res) => {
 router.get('/post/:id', (req, res) => {
   Post.findOne({
     where: {
-      // specify the post id parameter in the query
       id: req.params.id
     },
-    // Query configuration, as with the get all posts route
     attributes: [
       'id',
       'title',
@@ -74,7 +72,7 @@ router.get('/post/:id', (req, res) => {
   })
     .then(postData => {
 
-      if (postData) {
+      if (!postData) {
         res.status(404).json({ message: 'No post by this id exists' });
         return;
       }
