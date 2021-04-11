@@ -84,9 +84,9 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', withAuth, async (req, res) => {
-    // expects {title: 'String of Stuff', content: 'String of stuff, all the text content.', user_id: 1}
+    // expects STRINGS title and content
     try {
-        const postData = Post.create({
+        const postData = await Post.create({
             title: req.body.title,
             content: req.body.content,
             user_id: req.session.user_id
