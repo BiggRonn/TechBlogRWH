@@ -44,6 +44,51 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/post/:id', (req, res) => {
+  Post.findOne({
+    where: {
+      // specify the post id parameter in the query
+      id: req.params.id
+    },
+    // Query configuration, as with the get all posts route
+    attributes: [
+      'id',
+      'title',
+      'content',
+      'created_at',
+    ],
+    include: [
+      {
+        model: User,
+        attributes: ['name']
+      },
+      {
+          model: Comment,
+          attributes: ['id', 'content', 'post_id', 'user_id', 'created_at'],
+          include: {
+              model: User,
+              attributes: ['name']
+          }
+      }
+    ]
+  })
+    .then(postData => {
+
+      if (postData) {
+        res.status(404).json({ message: 'No post by this id exists' });
+        return;
+      }
+      const post = postData.get({ plain: true });
+      res.render('view-post', {
+          post,
+          loggedIn: req.session.loggedIn
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
 
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
