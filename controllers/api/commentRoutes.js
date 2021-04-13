@@ -7,7 +7,7 @@ const withAuth = require('../../utils/auth');
 // Get comments
 router.get('/', async (req, res) => {
     try {
-        const commentData = await Comment.findAll()
+        const commentData = await Comment.findAll();
         res.json(commentData)
     } catch (err) {
         console.log(err);
@@ -32,8 +32,7 @@ router.post('/', withAuth, async (req, res) => {
         res.status(400).json(err);
 
     }
-})
-    ;
+});
 
 // Delete a comment
 router.delete('/:id', withAuth, async (req, res) => {

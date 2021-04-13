@@ -87,14 +87,13 @@ router.post('/', withAuth, async (req, res) => {
     // expects STRINGS title and content
     try {
         const postData = await Post.create({
-            title: req.body.title,
-            content: req.body.content,
+            ...req.body,
             user_id: req.session.user_id
         })
-        res.json(postData)
+        res.status(200).json(postData)
     } catch (err) {
         console.log(err);
-        res.status(500).json(err);
+        res.status(400).json(err);
     }
 });
 

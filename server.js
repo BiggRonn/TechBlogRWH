@@ -16,6 +16,7 @@ const hbs = exphbs.create({ helpers });
 
 const sess = {
   secret: process.env.DB_SECRET,
+  //user access to website will expire after set time
   cookie: {maxAge: 8000000},
   resave: false,
   saveUninitialized: true,
